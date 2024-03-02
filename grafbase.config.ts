@@ -1,33 +1,35 @@
-import { g, config } from "@grafbase/sdk";
+import { graph, config } from "@grafbase/sdk";
 
-const User = g.model("User", {
-  name: g.string().length({ min: 3, max: 50 }),
-  email: g.string().unique(),
+// Welcome to Grafbase!
+//
+// Configure authentication, data sources, resolvers and caching for your GraphQL API.
+
+const g = graph.Standalone();
+
+const project = g.type("Project", {
+  title: g.string(),
+  description: g.string(),
+  imageUrl: g.url(),
+  liveSiteUrl: g.url(),
+  githubUrl: g.url(),
+  category: g.string(),
+  createdBy: g.ref(user).resolver("user"),
+});
+
+const user = g.type("User", {
+  name: g.string(),
+  email: g.string(),
   avatarUrl: g.url(),
   description: g.string().optional(),
   githubUrl: g.url().optional(),
   linkedInUrl: g.url().optional(),
-  projects: g
-    .relation(() => Project)
-    .list()
-    .optional(),
-});
-
-const Project = g.model("Project", {
-  title: g.string().length({ min: 3 }),
-  description: g.string(),
-  image: g.url(),
-  liveSiteUrl: g.url(),
-  githubUrl: g.url(),
-  category: g.string().search(),
-  createdBy: g.relation(() => User),
+  projects: g.ref(project).list().resolver("project"),
 });
 
 export default config({
-  schema: g,
+  graph: g,
 
   auth: {
-    //
     rules: (rules) => {
       rules.public();
     },
