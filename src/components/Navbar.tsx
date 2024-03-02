@@ -7,7 +7,7 @@ const Navbar = () => {
   const session = null;
   return (
     <header className="border-b w-full h-fit border-gray-300 p-3">
-      <nav className="container max-w-7xl  flex justify-between items-center">
+      <nav className="container flex justify-between items-center">
         <div className="flex-1 flex  items-center gap-10">
           <Link href={"/"} className="text-2xl text-zinc-500 font-semibold">
             Dri
